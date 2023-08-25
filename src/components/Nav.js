@@ -22,7 +22,7 @@ function Nav({setAuthState}) {
            <Link to='/login'> Login</Link>
            
          </>
-        ) : authState.role === 1 ? (
+        ) : Number(authState.role) === 1 ? (
           <>
           <Link to='/'> Home Page</Link>
           <Link to='/createpost'> Create A Post</Link>

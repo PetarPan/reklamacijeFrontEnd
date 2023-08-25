@@ -1,74 +1,23 @@
 
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   useHistory,
   useParams,
 } from "react-router-dom/cjs/react-router-dom.min";
-import PostSt from "../styledComponents/PostSt.style";
-import { AuthContext } from "../helpers/AuthContext";
+import  PostSt from "../styledComponents/PostSt.style";
 
 function Post() {
   let { id } = useParams();
   const [postObject, setPostObject] = useState({});
-  const [comments, setComments] = useState([]);
-  const [newComment, setNewComment] = useState("");
-  const { authState } = useContext(AuthContext);
 
   let history = useHistory();
   useEffect(() => {
     axios.get(`http://localhost:3002/posts/byId/${id}`).then((response) => {
       setPostObject(response.data);
     });
-
-    axios.get(`http://localhost:3002/comments/${id}`).then((response) => {
-      setComments(response.data);
-    });
   }, [id]);
 
-  const addComment = () => {
-    axios
-      .post(
-        "http://localhost:3002/comments",
-        {
-          commentBody: newComment,
-          PostId: id,
-        },
-        {
-          headers: {
-            accessToken: localStorage.getItem("accessToken"),
-          },
-        }
-      )
-      .then((response) => {
-        if (response.data.error) {
-          console.log(response.data.error);
-        } else {
-          const commentToAdd = {
-            commentBody: newComment,
-            username: response.data.username,
-          };
-          setComments([...comments, commentToAdd]);
-          setNewComment("");
-          //refresujemo stranicu jer se bez toga javlja greska i nemoguce je brisanje komentara onmah nakon unosa istog... resi problem kasnije...
-          window.location.reload();
-        }
-      });
-  };
-
-  const deleteComment = (id) => {
-    axios
-      .delete(`http://localhost:3002/comments/${id}`, {
-        headers: { accessToken: localStorage.getItem("accessToken") },
-      })
-      .then(() => {
-        setComments(
-          comments.filter((val) => {
-            return val.id !== id;
-          })
-        );
-      });
-  };
 
   const deletePost = (id) => {
     axios
@@ -85,124 +34,179 @@ function Post() {
       }) */
   };
 
-   const editPost = (option) => {
-      if(option === 'title') {
-        let newTitle = prompt('Enter new title: ');
-        axios.put(`http://localhost:3002/posts/title`, 
-        {
-          newTitle: newTitle, 
-          id: id,
-        },
-        { headers: { accessToken: localStorage.getItem("accessToken") },}
-        );
-        setPostObject({...postObject, title: newTitle});
-      } else {
-        let newPostText = prompt('Enter new text: ');
-        axios.put(`http://localhost:3002/posts/postText`, 
-        {
-          newText: newPostText, 
-          id: id,
-        },
-        { headers: { accessToken: localStorage.getItem("accessToken") },}
-        );
-        setPostObject({...postObject, postText: newPostText});
+    const editPost = (option) => {
+      let newValue;
+      
+      switch (option) {
+
+        case 'buyerAccount':
+          newValue = prompt(`Enter new ${option}: `);
+          axios.put(
+            `http://localhost:3002/posts/buyerAccount`,
+            {
+              newBuyerAccount: newValue,
+              id: id,
+            },
+            { headers: { accessToken: localStorage.getItem("accessToken") } }
+          );
+          setPostObject({ ...postObject, buyerAccount: newValue });
+          break;
+          
+        case 'buyerName':
+          newValue = prompt(`Enter new ${option}: `);
+          axios.put(
+            `http://localhost:3002/posts/buyerName`,
+            {
+              newBuyerName: newValue,
+              id: id,
+            },
+            { headers: { accessToken: localStorage.getItem("accessToken") } }
+          );
+          setPostObject({ ...postObject, buyerName: newValue });
+          break;
+          
+          case 'address':
+            newValue = prompt(`Enter new ${option}: `);
+            axios.put(
+              `http://localhost:3002/posts/address`,
+              {
+                newAddress: newValue,
+                id: id,
+              },
+              { headers: { accessToken: localStorage.getItem("accessToken") } }
+            );
+            setPostObject({ ...postObject, address: newValue });
+            break;
+
+            case 'city':
+            newValue = prompt(`Enter new ${option}: `);
+            axios.put(
+              `http://localhost:3002/posts/city`,
+              {
+                newCity: newValue,
+                id: id,
+              },
+              { headers: { accessToken: localStorage.getItem("accessToken") } }
+            );
+            setPostObject({ ...postObject, city: newValue });
+            break;
+
+            case 'typeOfComplaintSend':
+            newValue = prompt(`Enter new ${option}: `);
+            axios.put(
+              `http://localhost:3002/posts/typeOfComplaintSend`,
+              {
+                newTypeOfComplaintSend: newValue,
+                id: id,
+              },
+              { headers: { accessToken: localStorage.getItem("accessToken") } }
+            );
+            setPostObject({ ...postObject, typeOfComplaintSend: newValue });
+            break;
+
+            case 'complaintNature':
+              newValue = prompt(`Enter new ${option}: `);
+              axios.put(
+                `http://localhost:3002/posts/complaintNature`,
+                {
+                  newComplaintNature: newValue,
+                  id: id,
+                },
+                { headers: { accessToken: localStorage.getItem("accessToken") } }
+              );
+              setPostObject({ ...postObject, complaintNature: newValue });
+              break;
+
+              case 'recieveComplaintDate':
+              newValue = prompt(`Enter new ${option}: `);
+              axios.put(
+                `http://localhost:3002/posts/recieveComplaintDate`,
+                {
+                  newRecieveComplaintDate: newValue,
+                  id: id,
+                },
+                { headers: { accessToken: localStorage.getItem("accessToken") } }
+              );
+              setPostObject({ ...postObject, recieveComplaintDate: newValue });
+              break;
+
+              case 'endComplaintDate':
+              newValue = prompt(`Enter new ${option}: `);
+              axios.put(
+                `http://localhost:3002/posts/endComplaintDate`,
+                {
+                  newEndComplaintDate: newValue,
+                  id: id,
+                },
+                { headers: { accessToken: localStorage.getItem("accessToken") } }
+              );
+              setPostObject({ ...postObject, endComplaintDate: newValue });
+              break;
+
+              case 'note':
+              newValue = prompt(`Enter new ${option}: `);
+              axios.put(
+                `http://localhost:3002/posts/note`,
+                {
+                  newNote: newValue,
+                  id: id,
+                },
+                { headers: { accessToken: localStorage.getItem("accessToken") } }
+              );
+              setPostObject({ ...postObject, note: newValue });
+              break;
+
+              case 'justifiedComplaint':
+              newValue = prompt(`Enter new ${option}: `);
+              axios.put(
+                `http://localhost:3002/posts/justifiedComplaint`,
+                {
+                  newJustifiedComplaint: newValue,
+                  id: id,
+                },
+                { headers: { accessToken: localStorage.getItem("accessToken") } }
+              );
+              setPostObject({ ...postObject, justifiedComplaint: newValue });
+              break;
+
+        default:
+          return 0;
       }
-    } 
-
-  /* const editPost = (option, currentValue) => {
-    let newValue = prompt(`Enter new ${option}: `, currentValue);
-    if (newValue !== null) {
-      axios
-        .put(
-          `http://localhost:3002/posts/${option}`,
-          {
-            [option === "title" ? "newTitle" : "newText"]: newValue,
-            id: id,
-          },
-          { headers: { accessToken: localStorage.getItem("accessToken") } }
-        )
-        .then((response) => {
-          // Ažurirajte naslov ili tekst posta u zavisnosti od opcije
-          if (option === "title") {
-            setPostObject({ ...postObject, title: newValue });
-          } else {
-            setPostObject({ ...postObject, postText: newValue });
-          }
-        })
-        .catch((error) => {
-          console.error(`Error updating ${option}:`, error);
-        });
-    }
-  }; */
-
+    };
+    
   return (
-    <PostSt>
+     <PostSt>
       <div className='postPage'>
         <div className='leftSide'>
           <div className='post' id='individual'>
             <div
               className='title'
               onClick={() => {
-                editPost("title");
+                editPost("buyerAccount");
               }}>
-              {postObject.title}
+              {postObject.buyerAccount}
             </div>
             <div
               className='postPage'
               onClick={() => {
-                editPost("postPage");
+                editPost("buyerName");
               }}>
-              {postObject.postText}
+              {postObject.buyerName}
             </div>
             <div className='footer'>
-              {postObject.username}
-              {/* logika za prikazivanje dugmena za brisanje posta samo onome ko je isti kreirao */}
-              {authState.username === postObject.username && (
+              {postObject.UserId}
                 <button
                   onClick={() => {
                     deletePost(postObject.id);
                   }}>
                   Delete Post
                 </button>
-              )}
             </div>
           </div>
         </div>
-        <div className='rightSide'>
-          <div className='addCommentContainer'>
-            <input
-              type='text'
-              placeholder='Comment...'
-              autoComplete='off'
-              onChange={(event) => {
-                setNewComment(event.target.value);
-              }}
-              value={newComment}
-            />
-            <button onClick={addComment}>Add Comment</button>
-            <div className='listOfComments'>
-              {comments.map((comment, key) => {
-                return (
-                  <div key={key} className='comment'>
-                    {comment.commentBody}
-                    <label>Username: {comment.username}</label>
-                    {/* prikazujemo dugme za brisanje komentara samo za korisnike koji su napisali taj komentar */}
-                    {authState.username === comment.username && (
-                      <button
-                        onClick={() => {
-                          deleteComment(comment.id);
-                        }}>
-                        X
-                      </button>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
+        
       </div>
-    </PostSt>
+    </PostSt> 
   );
 }
 
