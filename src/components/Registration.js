@@ -3,7 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 import FormSt from '../styledComponents/FormSt.style'
-import { Link, useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import { AuthContext } from "../helpers/AuthContext";
 
 function Registration() {
@@ -15,7 +15,6 @@ function Registration() {
         lastName:""
     };
 
-const history = useHistory();
 const { authState } = useContext(AuthContext);
 
 

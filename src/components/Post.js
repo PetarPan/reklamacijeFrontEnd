@@ -169,6 +169,20 @@ function Post() {
               setPostObject({ ...postObject, justifiedComplaint: newValue });
               break;
 
+
+              case 'compliantEnd':
+              newValue = prompt(`Enter new ${option}: `);
+              axios.put(
+                `http://localhost:3002/posts/compliantEnd`,
+                {
+                  newCompliantEnd: newValue,
+                  id: id,
+                },
+                { headers: { accessToken: localStorage.getItem("accessToken") } }
+              );
+              setPostObject({ ...postObject, compliantEnd: newValue });
+              break;
+
         default:
           return 0;
       }

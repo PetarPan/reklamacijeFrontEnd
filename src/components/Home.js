@@ -31,6 +31,8 @@ function Home() {
     }
   }, []);
 
+//header definition
+
   const columns = [
     {
     dataField: "buyerAccount",
@@ -80,6 +82,10 @@ function Home() {
   {
     dataField: "justifiedComplaint",
     text: "Opravdano",
+  },
+  {
+    dataField: "compliantEnd",
+    text: "Zaključeno",
   },
 ]
 const handleRowClick = (row) => {

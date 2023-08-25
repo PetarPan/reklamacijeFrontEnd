@@ -18,6 +18,7 @@ function CreatePost() {
     endCompliantDate: "",
     note: "",
     justifiedComplaint: "",
+    compliantEnd: "",
   };
 
   useEffect(() => {
@@ -139,14 +140,14 @@ function CreatePost() {
               type='date'
             />
             <br></br>
-            <label>Odgovor na reklamaciju: </label>
+            <label>Odgovor na reklamaciju : </label>
             <ErrorMessage name='note' component='span' />
             <Field
               id='inputCreatePost'
               name='note'
               placeholder='(Odgovor na reklamaciju)'
             />
-            <label>Opravdano: </label>
+            <label>Opravdano :</label>
             {/* <ErrorMessage name='justifiedComplaint' component='span' /> */}
             <Field
               id='inputCreatePost'
@@ -155,6 +156,18 @@ function CreatePost() {
               as='select'>
               <option value='' disabled>
                 Da li je reklamacija opravdana?
+              </option>
+              <option value='Da'>Da</option>
+              <option value='Ne'>Ne</option>
+            </Field> <br></br>
+            <label>Zaključeno :</label>
+            <Field
+              id='inputCreatePost'
+              name='compliantEnd'
+              placeholder='(Ex.ovde ide lista opcija)'
+              as='select'>
+              <option value='' disabled>
+                Da li je reklamacija zatvorena?
               </option>
               <option value='Da'>Da</option>
               <option value='Ne'>Ne</option>
