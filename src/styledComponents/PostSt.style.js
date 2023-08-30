@@ -7,7 +7,7 @@ import styled from 'styled-components';
 const PostSt = styled.div`
 .post {
   width: 400px;
-  height: 300px;
+  /* height: 300px; */
   border-radius: 10px;
   display: flex;
   flex-direction: column;
@@ -23,7 +23,7 @@ const PostSt = styled.div`
   cursor: pointer;
 }
 .post .title {
-  flex: 20%;
+ /*  flex: 20%; */
   border-bottom: 1px solid lightgray;
   background-color: dodgerblue;
   display: grid;
@@ -32,13 +32,13 @@ const PostSt = styled.div`
 }
 
 .post .body {
-  flex: 60%;
+ /*  flex: 60%; */
   display: grid;
   place-content: center;
 }
 
 .post .footer {
-  flex: 20%;
+  /* flex: 20%; */
   border-top: 1px solid lightgray;
   display: flex;
   align-items: center;
@@ -53,8 +53,8 @@ const PostSt = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;
-  height: 100%;
-}
+/*   height: 100%;
+ */}
 
 .leftSide {
   flex: 50%;
@@ -63,16 +63,11 @@ const PostSt = styled.div`
   place-items: center;
 }
 
-.rightSide {
-  flex: 50%;
-  height: calc(100vh - 70px);
-  display: grid;
-  place-items: center;
-}
+
 
 #individual {
-  height: 500px;
-  width: 600px;
+/*   height: 500px;
+ */  width: 600px;
 }
 
 #individual .title,
@@ -136,7 +131,15 @@ button {
   margin-top: 20px;
 }
 
-    
+  .pdfContainer {
+    display: block;
+    width: 600px;
+    height: 600px;
+    background: lightblue;
+  }
+  .red {
+    color: red;
+  }
 `
 
 export default PostSt;
