@@ -1,9 +1,15 @@
+/** @format */
+
 import React, { useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import FormSt from "../styledComponents/FormSt.style";
+import {
+  selectOptionsCreatePost,
+  selectOptionComplaintType,
+} from "../constants";
 function CreatePost() {
   const initialValues = {
     buyerAccount: "",
@@ -81,6 +87,7 @@ function CreatePost() {
       });
     console.log(data);
   };
+
   return (
     <FormSt>
       <div className='formContainer'>
@@ -133,6 +140,14 @@ function CreatePost() {
               placeholder='(Ex. ovde ide lista opcija)'
               as='select'>
               <option value='' disabled>
+                Izaberite način podnošenja reklamacije
+              </option>
+              {Object.entries(selectOptionsCreatePost).map(([key, value]) => (
+                <option key={key} value={key}>
+                  {value}
+                </option>
+              ))}
+              {/*  <option value='' disabled>
                 Odaberi tip nacin prijema reklamacije
               </option>
               <option value='Telefonskim putem'>Telefonskim putem</option>
@@ -141,7 +156,7 @@ function CreatePost() {
               <option value='Kontakt centar Sektora trgovine'>
                 Kontakt centar Sektora trgovine
               </option>
-              <option value='Putem poste'>Putem poste</option>
+              <option value='Putem poste'>Putem poste</option> */}
             </Field>
             <br></br>
             <label>Tip reklamacije: </label>
@@ -153,6 +168,14 @@ function CreatePost() {
               placeholder='(Ex.ovde ide lista opcija)'
               as='select'>
               <option value='' disabled>
+                Izaberite tip reklamacije
+              </option>
+              {Object.entries(selectOptionComplaintType).map(([key, value]) => (
+                <option key={key} value={key}>
+                  {value}
+                </option>
+              ))}
+              {/* <option value='' disabled>
                 Odaberi tip reklamacije
               </option>
               <option value='Nema gasa'>Nema gasa</option>
@@ -160,7 +183,7 @@ function CreatePost() {
               <option value='Neocitano stanje'>Neocitano stanje</option>
               <option value='Deblokada regulatora'>Deblokada regulatora</option>
               <option value='Havarija'>Havarija</option>
-              <option value='Primedba na obracun'>Primedba na obracun</option>
+              <option value='Primedba na obracun'>Primedba na obracun</option> */}
             </Field>
             <br></br>
             <label>Datum prijema reklamacije: </label>

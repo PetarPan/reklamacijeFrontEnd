@@ -1,3 +1,4 @@
+import 'react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css'
 import React from "react";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -6,7 +7,8 @@ import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from "react-bootstrap-table2-paginator";
 //import cellEditFactory, {Type} from "react-bootstrap-table2-editor";
-import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
+import filterFactory, { textFilter,  selectFilter, dateFilter  } from "react-bootstrap-table2-filter";
+import { selectOptionComplaintType, selectOptionsCreatePost } from '../constants';
 
 function Home() {
   const [listOfPosts, setListOfPosts] = useState([]);
@@ -26,6 +28,8 @@ function Home() {
     }
   }, []);
 
+  
+
   //header definition
 
   const columns = [
@@ -33,13 +37,14 @@ function Home() {
       dataField: "buyerAccount",
       text: "Ugovor",
       sort: true,
+      filter: textFilter(),
       
     },
     {
       dataField: "buyerName",
       text: "Naziv kupca",
       sort: true,
-     
+      filter: textFilter(),
     },
     {
       dataField: "address",
@@ -55,11 +60,19 @@ function Home() {
       dataField: "typeOfCompliantSend",
       text: "Nacin prijema",
       sort: true,
+      formatter: cell => selectOptionsCreatePost[cell],
+      filter: selectFilter({
+        options: selectOptionsCreatePost
+      }) 
     },
     {
       dataField: "compliantNature",
       text: "Vrsta reklamacije",
       sort: true,
+      formatter: cell => selectOptionComplaintType[cell],
+      filter: selectFilter({
+        options: selectOptionComplaintType
+      }) 
      
     },
     {
@@ -69,6 +82,7 @@ function Home() {
       formatter: (cellContent) => {
         return cellContent.substring(0, 10);
       },
+      filter: dateFilter(),
     },
     {
       dataField: "endCompliantDate",
@@ -77,11 +91,13 @@ function Home() {
       formatter: (cellContent) => {
         return cellContent.substring(0, 10);
       },
+      filter: dateFilter(),
     },
     {
       dataField: "note",
       sort: true,
       text: "Odgovor",
+      filter: textFilter(),
     },
     {
       dataField: "justifiedComplaint",
