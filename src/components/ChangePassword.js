@@ -1,10 +1,14 @@
 import axios from "axios";
 import React, { useState } from "react";
+import FormSt from "../styledComponents/FormSt.style";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 
 function ChangePassword() {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
 
+  const history = useHistory();
   const changePassword = () => {
     axios
       .put(
@@ -23,29 +27,43 @@ function ChangePassword() {
         if (response.data.error) {
           alert(response.data.error);
         }
+        
       });
+      alert("Uspešno promenjena lozinka");
+        history.push('/')
   };
   return (
-    <div>
-      <h1>Change Your Password:</h1>
-      <label>Old Password: </label>
+    <HelmetProvider>
+      <Helmet>
+        <title>Promena lozinke</title>
+      </Helmet>
+    <FormSt>
+      <form onClick={(e) => {
+        e.preventDefault();
+      }}>
+    <div className='formContainer'>
+      <h3>Forma za izmenu lozinke:</h3>
+      <label>STARA LOZINKA: </label>
       <input
         type='text'
-        placeholder='Old password...'
+        placeholder='Unesite staru lozinku'
         onChange={(event) => {
           setOldPassword(event.target.value);
         }}></input>{" "}
       <br></br>
-      <label>New Password: </label>
+      <label>NOVA LOZINKA: </label>
       <input
-        type='text'
-        placeholder='New password...'
+        type='password'
+        placeholder='Unesite novu lozinku'
         onChange={(event) => {
           setNewPassword(event.target.value);
         }}></input>{" "}
       <br></br>
       <button onClick={changePassword}>Save Changes</button>
     </div>
+    </form>
+    </FormSt>
+    </HelmetProvider>
   );
 }
 

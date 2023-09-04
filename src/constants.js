@@ -16,5 +16,6 @@ export const selectOptionsCreatePost = {
     "Deblokada regulatora": "Deblokada regulatora",
     "Havarija":"Havarija",
     "Primedba na obračun":"Primedba na obračun",
+    "Dotrajali ormarić":"Dotrajali ormarić",
   }
   

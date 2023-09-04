@@ -22,7 +22,7 @@ function Profile() {
     axios.get(`http://localhost:3002/posts/byuserId/${id}`).then((response) => {
       setListOfPosts(response.data);
     });
-  }, []);
+  }, [id]);
 
   return (
     <div className='profilePageContainer'>

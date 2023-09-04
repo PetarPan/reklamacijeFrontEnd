@@ -11,6 +11,8 @@ function Nav({ setAuthState }) {
       username: "",
       id: 0,
       role: "",
+      name: "",
+      lastName: "",
       status: false,
     });
   };
@@ -31,7 +33,7 @@ function Nav({ setAuthState }) {
           </Link>
           <Link className='username' to='#'>
             {" "}
-            User: {authState.username}
+            Korisnik: {authState.username}
           </Link>
         </>
       ) : (
@@ -44,7 +46,7 @@ function Nav({ setAuthState }) {
           </Link>
           <Link className='username' to='#'>
             {" "}
-            User: {authState.username}
+            Korisnik: {authState.name + " " + authState.lastName}
           </Link>
         </>
       )}

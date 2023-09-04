@@ -1,6 +1,6 @@
 /** @format */
 
-import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch  } from "react-router-dom";
 import Home from "./components/Home";
 import CreatePost from "./components/CreatePost";
 import Post from "./components/Post";
@@ -13,18 +13,19 @@ import PageNotFound from "./components/PageNotFound";
 import Profile from "./components/Profile";
 import ChangePassword from "./components/ChangePassword";
 import Nav from "./components/Nav";
+import ListOfUsers from "./components/ListOfUsers";
 
 function App() {
   const [authState, setAuthState] = useState({
     username: "",
     id: 0,
     role:'',
+    name: "",
+    lastName: "",
     status: false,
-    
     });
-
+    
   console.log(authState);
-
   useEffect(() => {
     axios
       .get("http://localhost:3002/auth/auth", {
@@ -40,6 +41,8 @@ function App() {
             username: response.data.username,
             id: response.data.id,
             role: response.data.role,
+            name: response.data.name,
+            lastName: response.data.lastName,
             status: true
            
           });
@@ -50,17 +53,6 @@ function App() {
         console.log("greska pri proveri autentifikacije", err);
       });
   }, []);
-
-  //logout funkcija, prebacena u Nav.js
- /*  const logout = () => {
-    localStorage.removeItem("accessToken");
-    setAuthState({
-      username: "",
-      id: 0,
-      role: '',
-      status: false,
-    });
-  }; */
 
   return (
     <AuthContext.Provider value={{ authState, setAuthState }}>
@@ -74,6 +66,7 @@ function App() {
           <Route path='/login' exact component={Login} />
           <Route path='/profile/:id' exact component={Profile} />
           <Route path='/changepassword' exact component={ChangePassword} />
+          <Route path="/listofusers" exact component={ListOfUsers} />
           <Route path='*' exact component={PageNotFound} />
         </Switch>
         

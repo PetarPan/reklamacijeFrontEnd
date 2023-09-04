@@ -1,4 +1,11 @@
 
+.myText {
+  font-family: 'Arial Unicode MS', sans-serif; 
+  font-size: 16px; 
+}
+
+
+
 .App {
   width: 100%;
   height: auto;

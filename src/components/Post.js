@@ -1,5 +1,4 @@
-/** @format */
-
+import "react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import {
@@ -7,25 +6,34 @@ import {
   useParams,
 } from "react-router-dom/cjs/react-router-dom.min";
 import PostSt from "../styledComponents/PostSt.style";
-import { Page, Text, View, Document, PDFDownloadLink, StyleSheet  } from "@react-pdf/renderer";
 import {
-  // ...
+  Page,
+  Text,
+  View,
+  Document,
+  PDFDownloadLink,
+  StyleSheet,
+  Image,
 } from "@react-pdf/renderer";
+import // ...
+"@react-pdf/renderer";
+import Img from "./Img";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 
-// Dodajte ovaj komentar kako biste postavili UTF-8 enkoding
-// @ts-nocheck
 
 function Post() {
   let { id } = useParams();
   const [postObject, setPostObject] = useState({});
-  const [showPdf, setShowPdf] = useState(false);
 
   let history = useHistory();
   useEffect(() => {
     axios.get(`http://localhost:3002/posts/byId/${id}`).then((response) => {
       setPostObject(response.data);
     });
+    
   }, [id]);
+  
+/* funkcija za brisanje reklamacije */
 
   const deletePost = (id) => {
     axios
@@ -35,6 +43,7 @@ function Post() {
       .then(() => {
         history.push("/");
         console.log(`Post ID ${id} deleted`);
+        alert(`Reklamacija ID ${postObject.id} kupca ${postObject.buyerAccount} je obrisana`)
       });
     /* .catch((error) => {
         console.error("An error occurred during post deletion:", error);
@@ -42,10 +51,7 @@ function Post() {
       }) */
   };
 
-  const handlePrintPdf = () => {
-    setShowPdf(true);
-  };
-
+/* Funkcija za update vrednosti reklamacije */
   const editPost = (option) => {
     let newValue;
 
@@ -102,56 +108,56 @@ function Post() {
         setPostObject({ ...postObject, city: newValue });
         break;
 
-      case "typeOfComplaintSend":
+      case "typeOfCompliantSend":
         newValue = prompt(`Enter new ${option}: `);
         axios.put(
-          `http://localhost:3002/posts/typeOfComplaintSend`,
+          `http://localhost:3002/posts/typeOfCompliantSend`,
           {
-            newTypeOfComplaintSend: newValue,
+            newTypeOfCompliantSend: newValue,
             id: id,
           },
           { headers: { accessToken: localStorage.getItem("accessToken") } }
         );
-        setPostObject({ ...postObject, typeOfComplaintSend: newValue });
+        setPostObject({ ...postObject, typeOfCompliantSend: newValue });
         break;
 
-      case "complaintNature":
+      case "compliantNature":
         newValue = prompt(`Enter new ${option}: `);
         axios.put(
-          `http://localhost:3002/posts/complaintNature`,
+          `http://localhost:3002/posts/compliantNature`,
           {
-            newComplaintNature: newValue,
+            newCompliantNature: newValue,
             id: id,
           },
           { headers: { accessToken: localStorage.getItem("accessToken") } }
         );
-        setPostObject({ ...postObject, complaintNature: newValue });
+        setPostObject({ ...postObject, compliantNature: newValue });
         break;
 
-      case "recieveComplaintDate":
+      case "recieveCompliantDate":
         newValue = prompt(`Enter new ${option} u formatu gggg-mm-dd: `);
         axios.put(
-          `http://localhost:3002/posts/recieveComplaintDate`,
+          `http://localhost:3002/posts/recieveCompliantDate`,
           {
-            newRecieveComplaintDate: newValue,
+            newRecieveCompliantDate: newValue,
             id: id,
           },
           { headers: { accessToken: localStorage.getItem("accessToken") } }
         );
-        setPostObject({ ...postObject, recieveComplaintDate: newValue });
+        setPostObject({ ...postObject, recieveCompliantDate: newValue });
         break;
 
-      case "endComplaintDate":
+      case "endCompliantDate":
         newValue = prompt(`Enter new ${option} u formatu gggg-mm-dd: `);
         axios.put(
-          `http://localhost:3002/posts/endComplaintDate`,
+          `http://localhost:3002/posts/endCompliantDate`,
           {
-            newEndComplaintDate: newValue,
+            newEndCompliantDate: newValue,
             id: id,
           },
           { headers: { accessToken: localStorage.getItem("accessToken") } }
         );
-        setPostObject({ ...postObject, endComplaintDate: newValue });
+        setPostObject({ ...postObject, endCompliantDate: newValue });
         break;
 
       case "note":
@@ -167,18 +173,18 @@ function Post() {
         setPostObject({ ...postObject, note: newValue });
         break;
 
-      case "justifiedComplaint":
-        newValue = prompt(`Enter new ${option}: `);
-        axios.put(
-          `http://localhost:3002/posts/justifiedComplaint`,
-          {
-            newJustifiedComplaint: newValue,
-            id: id,
-          },
-          { headers: { accessToken: localStorage.getItem("accessToken") } }
-        );
-        setPostObject({ ...postObject, justifiedComplaint: newValue });
-        break;
+        case "justifiedComplaint":
+          newValue = prompt(`Enter new ${option}: `);
+          axios.put(
+            `http://localhost:3002/posts/justifiedCompliant`,
+            {
+              newJustifiedCompliant: newValue,
+              id: id,
+            },
+            { headers: { accessToken: localStorage.getItem("accessToken") } }
+          );
+          setPostObject({ ...postObject, justifiedComplaint: newValue });
+          break;
 
       case "compliantEnd":
         newValue = prompt(`Enter new ${option}: `);
@@ -199,294 +205,225 @@ function Post() {
   };
 
 
-  /* const styles = StyleSheet.create({
+
+
+/* Stilizovanje .pdf reklamacije */
+  const styles = StyleSheet.create({
     container: {
       padding: 25,
+      margin: 5,
+      height: 800,
+        fontFamily: "Helvetica",
+      border: "2pt solid #000",
     },
     header: {
-    textAlign: "center",
-    color: 'red',
-    marginBottom: 15,
+/*       fontFamily: 'Arial Unicode MS',
+ */      textAlign: "center",
+      color: "black",
+      fontWeight: "bold",
+      marginBottom: 15,
+      /* borderBottom: "1pt solid #000", */
+      padding: 5,
     },
     title: {
-      fontSize: 18,
-      fontWeight: 'bold',
+      fontSize: 17,
+      fontWeight: "bold",
       marginBottom: 10,
+      borderBottom: "0.5pt solid #000",
+      padding: 5,
     },
     text: {
       fontSize: 16,
       marginBottom: 5,
+      borderBottom: "0.5pt solid #000",
+      padding: 5,
     },
-    }); */
-    const styles = StyleSheet.create({
-      container: {
-        padding: 25,
-        margin: 5,
-        border: '2pt solid #000', 
-      },
-      header: {
-        textAlign: 'center',
-        color: 'red',
-        marginBottom: 15,
-        borderBottom: '1pt solid #000',
-        padding: 5, 
-      },
-      title: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 10,
-        borderBottom: '0.5pt solid #000',
-        padding: 5,
-      },
-      text: {
-        fontSize: 16,
-        marginBottom: 5,
-        borderBottom: '0.5pt solid #000', 
-        padding: 5,
-      },
-    });
-    
+    image: {
+      width: 235,
+      height: 45,
+    },
+  });
+
   return (
+    <HelmetProvider>
+      <Helmet>
+      <title>Izmena reklamacije</title>
+      </Helmet>
     <PostSt>
-      <div className='postPage'>
-        <div className='leftSide'>
-          <div className='post' id='individual'>
-            <div className='title'>
-              Izmena podataka za reklamaciju ID:{`${postObject.id}`}
-            </div>
-            {/* Buyer Account Number */}
-            <div
-              className='postPage'
+      <h3 className='naslov'>
+        Izmena podataka za reklamaciju ID: {`${postObject.id}`}, kupac: {postObject.buyerName}, Ugovor br. {postObject.buyerAccount}
+      </h3>
+      {/* Postavljanje jedne reklamacije u tabelarni prikaz i funkcionalnost izmene vrednosti na klik */}
+      <table className='table table-striped table-bordered table-hover table-sm .table-responsive{-sm|-md|-lg|-xl}'>
+        <thead className='thead-dark'>
+          <tr>
+            <th scope='col'>Broj Ugovora</th>
+            <th scope='col'>Ime kupca</th>
+            <th scope='col'>Adresa</th>
+            <th scope='col'>Grad</th>
+            <th scope='col'>Način podnošenja</th>
+            <th scope='col'>Tip reklamacije</th>
+            <th scope='col'>Datum reklamacije</th>
+            <th scope='col'>Datum rešavanja</th>
+            <th scope='col'>Odgovor kupcu</th>
+            <th scope='col'>Opravdanost</th>
+            <th scope='col'>Zaključenost</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td
               onClick={() => {
                 editPost("buyerAccount");
               }}>
-              <label>Broj Ugovora: </label>
               {postObject.buyerAccount}
-            </div>
-            {/* Buyer Name */}
-            <div
-              className='postPage'
+            </td>
+            <td
               onClick={() => {
                 editPost("buyerName");
               }}>
-              <label>Ime i prezime: </label>
               {postObject.buyerName}
-            </div>
-            {/* Buyer Address */}
-            <div
-              className='postPage'
+            </td>
+            <td
               onClick={() => {
                 editPost("address");
               }}>
-              <label>Adresa: </label>
               {postObject.address}
-            </div>
-            {/* Buyer City */}
-            <div
-              className='postPage'
+            </td>
+            <td
               onClick={() => {
                 editPost("city");
               }}>
-              <label>Grad: </label>
               {postObject.city}
-            </div>
-            {/* Typer of Complaint */}
-            <div
-              className='postPage'
+            </td>
+            <td
               onClick={() => {
                 editPost("typeOfCompliantSend");
               }}>
-              <label>Način prijema reklamacije: </label>
               {postObject.typeOfCompliantSend}
-            </div>
-            {/* Complaint Nature */}
-            <div
-              className='postPage'
+            </td>
+            <td
               onClick={() => {
                 editPost("compliantNature");
               }}>
-              <label>Reklamacija na: </label>
               {postObject.compliantNature}
-            </div>
-            {/* Complaint Start Date */}
-            <div
-              className='postPage'
+            </td>
+            <td
               onClick={() => {
-                editPost("recieveComplaintDate");
+                editPost("recieveCompliantDate");
               }}>
-              <label>Datum prijema reklamacije: </label>
-              {postObject.recieveCompliantDate /* .substring(0,10) */}
-            </div>
-            {/* Complaint End Date */}
-            <div
-              className='postPage'
+              {postObject.recieveCompliantDate &&
+                postObject.recieveCompliantDate.substring(0, 10)}
+            </td>
+            <td
               onClick={() => {
-                editPost("endComplaintDate");
+                editPost("endCompliantDate");
               }}>
-              <label>Datum zatvaranja reklamacije: </label>
-              {postObject.endCompliantDate /* .substring(0,10) */}
-            </div>
-            {/* Complaint Note */}
-            <div
-              className='postPage'
+              {postObject.endCompliantDate &&
+                postObject.endCompliantDate.substring(0, 10)}
+            </td>
+            <td
               onClick={() => {
                 editPost("note");
               }}>
-              <label>Odgovor na rekmlamaciju: </label>
               {postObject.note}
-            </div>
-            {/* Is it Justified? */}
-            <div
-              className='postPage'
+            </td>
+            <td
               onClick={() => {
                 editPost("justifiedComplaint");
               }}>
-              <label>Da li je reklamacija opravdana?: </label>
               {postObject.justifiedComplaint}
-            </div>
-            {/* Is it Ended? */}
-            <div
-              className='postPage'
+            </td>
+            <td
               onClick={() => {
                 editPost("compliantEnd");
               }}>
-              <label>Da li je reklamacija zaključena?: </label>
               {postObject.compliantEnd}
-            </div>
-            <div className='footer'>
-              <label>Reklamaciju kreirao: </label>
-              {postObject.UserId}
-              <button
-                onClick={() => {
-                  deletePost(postObject.id);
-                }}>
-                Delete Post
-              </button>
-              <button onClick={handlePrintPdf}>Štampa reklamacije </button>
-            </div>
-          </div>
-        </div>
-{/* Ispis celokupne reklamacije, kao forma za izmenu podataka, yakomentarisana je, trenutno nije potrebna */}
-       {/*  {showPdf && (
-          <div className='pdfContainer'>
-            <Document>
-              <Page size='A4'>
-                <View>
-                  <Text>Broj Ugovora: {postObject.buyerAccount}</Text>
-                </View>
-                <br></br>
-                <View>
-                  <Text>Ime i prezime kupca: {postObject.buyerName}</Text>
-                </View>
-                <br></br>
-                <View>
-                  <Text>Adresa: {postObject.address}</Text>
-                </View>
-                <br></br>
-                <View>
-                  <Text>Grad: {postObject.city}</Text>
-                </View>
-                <br></br>
-                <View>
-                  <Text>Datum prijema: {postObject.recieveCompliantDate.substring(0,10)}</Text>
-                </View>
-                <br></br>
-                <View>
-                  <Text>Datum rešavanja: {postObject.endCompliantDate.substring(0,10)}</Text>
-                </View>
-                <br></br>
-                <View>
-                  <Text>Način prijema: {postObject.typeOfCompliantSend}</Text>
-                </View>
-                <br></br>
-                <View>
-                  <Text>Tip reklamacije: {postObject.compliantNature}</Text>
-                </View>
-                <br></br>
-                <View>
-                  <Text>Odgovor kupcu: {postObject.note}</Text>
-                </View>
-                <br></br>
-                <View>
-                  <Text>Opravdana: {postObject.justifiedComplaint}</Text>
-                </View>
-                <br></br>
-                <View>
-                  <Text className="red">Zaključena: {postObject.compliantEnd}</Text>
-                </View>
-                <br></br>
-              </Page>
-            </Document>
-          </div>
-        )} */}
-
-        {showPdf && (
-      <div className='pdfContainer'>
-        <PDFDownloadLink
+            </td>
+          </tr>
+        </tbody>
+      </table>
+{/* Dugme za brisanje reklamacije */}
+      <button
+        onClick={() => {
+          deletePost(postObject.id);
+        }}>
+        Obriši reklamaciju
+      </button>
+      {/* Dugme za transformisanje reklamacije u .pdf i štampu */}
+      <button /* onClick={handlePrintPdf} */>
+        <div className='pdfContainer'>
+          <PDFDownloadLink
             document={
-            <Document>
-              <Page size='A4'>
-              <View style={styles.container}>
-                  <Text style={styles.header}>Sektor distribucija gasa Beograd</Text>
+              <Document>
+                <Page size='A4'>
+                  <View style={styles.container}>
+                    <Image src={Img} style={styles.image} />
+                    <Text style={styles.header}>
+                      SEKTOR DISTRIBUCIJA GASA BEOGRAD, REKLAMACIJA BR: {postObject.id}
+                    </Text>
+                    <Text style={styles.title}>
+                      Broj Ugovora: {postObject.buyerAccount}
+                    </Text>
+                    <br></br>
+                    <Text style={styles.title}>
+                      Ime i prezime kupca: {postObject.buyerName}
+                    </Text>
+                    <br></br>
+                    <Text style={styles.title}>
+                      Adresa: {postObject.address}
+                    </Text>
+                    <br></br>
+                    <Text style={styles.title}>Grad: {postObject.city}</Text>
+                    <br></br>
+                    <Text style={styles.title}>
+                      Datum prijema:{" "}
+                      {postObject.recieveCompliantDate &&
+                        postObject.recieveCompliantDate.substring(0, 10)}
+                    </Text>
+                    <br></br>
+                    <Text style={styles.title}>
+                      Datum rešavanja:{" "}
+                      {postObject.endCompliantDate &&
+                        postObject.endCompliantDate.substring(0, 10)}
+                    </Text>
+                    <br></br>
+                    <Text style={styles.title}>
+                      Način prijema: {postObject.typeOfCompliantSend}
+                    </Text>
+                    <br></br>
+                    <Text style={styles.title}>
+                      Tip reklamacije: {postObject.compliantNature}
+                    </Text>
+                    <br></br>
+                    <Text style={styles.title}>
+                      Odgovor kupcu: {postObject.note}
+                    </Text>
+                    <br></br>
+                    <Text style={styles.title}>
+                      Opravdana: {postObject.justifiedComplaint}
+                    </Text>
+                    <br></br>
+                    <Text style={styles.title}>
+                      Zaključena: {postObject.compliantEnd}
+                    </Text>
+                    <Text style={styles.title}>
+                      Reklamaciju obradio: {postObject.UserId}
+                    </Text>
+                  </View>
                   <br></br>
-                  <Text style={styles.header}>Reklamacija broj: {postObject.id}</Text>
-                  <br></br>
-                  <Text style={styles.title}>Broj Ugovora: {postObject.buyerAccount}</Text>
-                
-                <br></br>
-               
-                  <Text style={styles.title}>Ime i prezime kupca: {postObject.buyerName}</Text>
-               
-                <br></br>
-               
-                  <Text style={styles.text}>Adresa: {postObject.address}</Text>
-                
-                <br></br>
-               
-                  <Text style={styles.title}>Grad: {postObject.city}</Text>
-               
-                <br></br>
-               
-                  <Text style={styles.title}>Datum prijema: {postObject.recieveCompliantDate.substring(0,10)}</Text>
-               
-                <br></br>
-                
-                  <Text style={styles.title}>Datum rešavanja: {postObject.endCompliantDate.substring(0,10)}</Text>
-                
-                <br></br>
-                
-                  <Text style={styles.title}>Način prijema: {postObject.typeOfCompliantSend}</Text>
-                
-                <br></br>
-                
-                  <Text style={styles.title}>Tip reklamacije: {postObject.compliantNature}</Text>
-               
-                <br></br>
-               
-                  <Text style={styles.title}>Odgovor kupcu: {postObject.note}</Text>
-               
-                <br></br>
-               
-                  <Text style={styles.title}>Opravdana: {postObject.justifiedComplaint}</Text>
-               
-                <br></br>
-                
-                  <Text style={styles.title}>Zaključena: {postObject.compliantEnd}</Text>
-                </View>
-                <br></br>
-              </Page>
-            </Document>
-          }
-          fileName={`reklamacija_${postObject.buyerAccount}.pdf`}
-        >
-          {({ blob, url, loading, error }) =>
-            loading ? 'Loading document...' : 'Preuzmi reklamaciju PDF'
-          }
-        </PDFDownloadLink>
-      </div>
-    )}
-      </div>
+                </Page>
+              </Document>
+            }
+            fileName={`reklamacija_${postObject.buyerAccount}.pdf`}>
+            {({ blob, url, loading, error }) =>
+              loading ? "Loading document..." : "Preuzmi reklamaciju PDF"
+            }
+          </PDFDownloadLink>
+        </div>
+      </button>
     </PostSt>
+    </HelmetProvider>
   );
 }
 

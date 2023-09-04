@@ -1,8 +1,11 @@
+/** @format */
+
 import React, { useState, useContext } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { AuthContext } from "../helpers/AuthContext";
 import FormSt from "../styledComponents/FormSt.style";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -25,6 +28,7 @@ function Login() {
           status: true,
         });
         history.push("/");
+       /*  window.location.reload(); */
       }
     });
   };
@@ -36,26 +40,38 @@ function Login() {
   };
 
   return (
-    <FormSt onKeyDown={handleKeyPress}>
-      <div className='formContainer'>
-        <label>Username:</label>
-        <input
-          type='text'
-          onChange={(event) => {
-            setUsername(event.target.value);
-          }}
-        />
-        <label>Password:</label>
-        <input
-          type='password'
-          onChange={(event) => {
-            setPassword(event.target.value);
-          }}
-        />
+    <HelmetProvider>
+      <FormSt onKeyDown={handleKeyPress}>
+        <Helmet>
+          <title>Login</title>
+        </Helmet>
+        <div className='formContainerLogin'>
+          <label>KORISNIČKO IME:</label>
 
-        <input className='button' type='submit' onClick={login} value='Login' />
-      </div>
-    </FormSt>
+          <input
+            type='text'
+            onChange={(event) => {
+              setUsername(event.target.value);
+            }}
+            placeholder='Unesite svoje korisničko ime'
+          />
+          <br></br>
+          <label>LOZINKA:</label>
+
+          <input
+            type='password'
+            onChange={(event) => {
+              setPassword(event.target.value);
+            }}
+            placeholder='Unesite svoju lozinku'
+          />
+          <br></br>
+          <button type='submit' onClick={login}>
+            Login
+          </button>
+        </div>
+      </FormSt>
+    </HelmetProvider>
   );
 }
 

@@ -5,6 +5,7 @@ import axios from "axios";
 import FormSt from "../styledComponents/FormSt.style";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import { AuthContext } from "../helpers/AuthContext";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 
 function Registration() {
   const initialValues = {
@@ -36,7 +37,12 @@ function Registration() {
   };
 
   return Number(authState.role) === 1 ? (
+  <HelmetProvider>
+    <Helmet>
+    <title>Registracija korisnika</title>
+    </Helmet>
     <FormSt>
+        <Link to='/listofusers'>lista korisnika</Link>
       <Formik
         initialValues={initialValues}
         onSubmit={onSubmit}
@@ -88,6 +94,7 @@ function Registration() {
         </Form>
       </Formik>
     </FormSt>
+    </HelmetProvider>
   ) : (
     <div>
       <div>Niste verifikovani da vidite ovu stranicu</div>

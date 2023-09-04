@@ -1,4 +1,6 @@
-import 'react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css'
+/** @format */
+
+import "react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css";
 import React from "react";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -7,8 +9,16 @@ import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from "react-bootstrap-table2-paginator";
 //import cellEditFactory, {Type} from "react-bootstrap-table2-editor";
-import filterFactory, { textFilter,  selectFilter, dateFilter  } from "react-bootstrap-table2-filter";
-import { selectOptionComplaintType, selectOptionsCreatePost } from '../constants';
+import filterFactory, {
+  textFilter,
+  selectFilter /* dateFilter  */,
+} from "react-bootstrap-table2-filter";
+import {
+  selectOptionComplaintType,
+  selectOptionsCreatePost,
+} from "../constants";
+import HomeTable from "../styledComponents/HomeTable.style";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 
 function Home() {
   const [listOfPosts, setListOfPosts] = useState([]);
@@ -28,8 +38,6 @@ function Home() {
     }
   }, []);
 
-  
-
   //header definition
 
   const columns = [
@@ -37,14 +45,17 @@ function Home() {
       dataField: "buyerAccount",
       text: "Ugovor",
       sort: true,
-      filter: textFilter(),
-      
+      filter: textFilter({
+        placeholder: "01xx-xxxxx-xx",
+      }),
     },
     {
       dataField: "buyerName",
       text: "Naziv kupca",
       sort: true,
-      filter: textFilter(),
+      filter: textFilter({
+        placeholder: "Pera Perić",
+      }),
     },
     {
       dataField: "address",
@@ -60,20 +71,21 @@ function Home() {
       dataField: "typeOfCompliantSend",
       text: "Nacin prijema",
       sort: true,
-      formatter: cell => selectOptionsCreatePost[cell],
+      formatter: (cell) => selectOptionsCreatePost[cell],
       filter: selectFilter({
-        options: selectOptionsCreatePost
-      }) 
+        options: selectOptionsCreatePost,
+        placeholder: "Odaberi iz liste",
+      }),
     },
     {
       dataField: "compliantNature",
       text: "Vrsta reklamacije",
       sort: true,
-      formatter: cell => selectOptionComplaintType[cell],
+      formatter: (cell) => selectOptionComplaintType[cell],
       filter: selectFilter({
-        options: selectOptionComplaintType
-      }) 
-     
+        options: selectOptionComplaintType,
+        placeholder: "Odaberi iz liste",
+      }),
     },
     {
       dataField: "recieveCompliantDate",
@@ -82,7 +94,8 @@ function Home() {
       formatter: (cellContent) => {
         return cellContent.substring(0, 10);
       },
-      filter: dateFilter(),
+      /*       filter: dateFilter(),
+       */
     },
     {
       dataField: "endCompliantDate",
@@ -91,13 +104,16 @@ function Home() {
       formatter: (cellContent) => {
         return cellContent.substring(0, 10);
       },
-      filter: dateFilter(),
+      /* filter: dateFilter(), */
     },
     {
       dataField: "note",
       sort: true,
       text: "Odgovor",
-      filter: textFilter(),
+      filter: textFilter({
+        className: "react-bootstrap-table filter-text",
+        delay: 5000,
+      }),
     },
     {
       dataField: "justifiedComplaint",
@@ -114,58 +130,38 @@ function Home() {
     history.push(`/post/${row.id}`); // Navigacija na stranicu za uređivanje
   };
   return (
-    <>
-      <BootstrapTable
-        keyField='id'
-        data={listOfPosts}
-        columns={columns}
-        striped
-        hover
-        condensed
-        pagination={paginationFactory()}
-        rowEvents={{
-          onClick: (e, row) => {
-            handleRowClick(row); // Poziv funkcije za rukovanje klikom na red
-          },
-        }}
-        /* cellEdit = {cellEditFactory({
+    <HelmetProvider>
+      <div>
+      <HomeTable>
+      <Helmet>
+      <title>Početna strana</title>
+      </Helmet>
+        <BootstrapTable
+          keyField='id'
+          className='table table-striped table-bordered table-hover table-sm table-responsive react-bootstrap-table filter-text '
+          data={listOfPosts}
+          columns={columns}
+          responsive
+          bordered
+          striped
+          hover
+          condensed
+          noDataIndication='Nisu se uspešno učitali podaci'
+          pagination={paginationFactory()}
+          rowEvents={{
+            onClick: (e, row) => {
+              handleRowClick(row); // Poziv funkcije za rukovanje klikom na red
+            },
+          }}
+          /* cellEdit = {cellEditFactory({
       mode: "dbclick",
       blurToSave: true,
     })} */
-        filter={filterFactory()}
-      />
-      {/* <HomeSt>
-      
-      
-      {listOfPosts.map((value) => {
-        return (
-          <div className='wrapper' key={value.id}>
-           
-            <div className='title'> {value.title} </div>
-            <div
-              className='postText'
-              onClick={() => {
-                history.push(`/post/${value.id}`);
-              }}>
-              
-              {value.postText}
-            </div>
-            <div className="username">
-              <Link to={`/profile/${value.UserId}`}>  {value.username}</Link>
-            </div>
-            <div className='buttton'>
-            <FontAwesomeIcon icon={faHeart} onClick={() => {
-                  likeAPost(value.id);
-                }}
-                className={likedPosts.includes(value.id) ? "unliked" : "liked"}/>      
-             
-              <label>{value.Likes.length}</label>
-            </div>
-          </div>
-        );
-      })}
-    </HomeSt> */}
-    </>
+          filter={filterFactory()}
+        />
+      </HomeTable>
+      </div>
+    </HelmetProvider>
   );
 }
 
