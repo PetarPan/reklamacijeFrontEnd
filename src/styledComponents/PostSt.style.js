@@ -5,6 +5,7 @@ import styled from 'styled-components';
 
 
 const PostSt = styled.div`
+
 .post {
   position: relative;
   width: 400px;
@@ -127,7 +128,6 @@ button:hover {
     text-align: center;
     vertical-align: middle;
   }
-
 
 
 

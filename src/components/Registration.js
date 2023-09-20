@@ -3,7 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import FormSt from "../styledComponents/FormSt.style";
-import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import { Link, NavLink } from "react-router-dom/cjs/react-router-dom.min";
 import { AuthContext } from "../helpers/AuthContext";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 
@@ -36,10 +36,10 @@ function Registration() {
     });
   };
 
-  return Number(authState.role) === 1 ? (
+  return  Number(authState.role) === 1 ?  (
   <HelmetProvider>
     <Helmet>
-    <title>Registracija korisnika</title>
+    <title>Registracija</title>
     </Helmet>
     <FormSt>
         <Link to='/listofusers'>lista korisnika</Link>
@@ -95,12 +95,12 @@ function Registration() {
       </Formik>
     </FormSt>
     </HelmetProvider>
-  ) : (
+   ) : (
     <div>
       <div>Niste verifikovani da vidite ovu stranicu</div>
       <Link to='/'>Home Page</Link>
     </div>
-  );
+  ); 
 }
 
 export default Registration;

@@ -28,7 +28,7 @@ function Login() {
           status: true,
         });
         history.push("/");
-       /*  window.location.reload(); */
+         window.location.reload(); 
       }
     });
   };

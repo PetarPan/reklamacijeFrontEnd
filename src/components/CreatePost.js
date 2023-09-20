@@ -54,6 +54,7 @@ function CreatePost() {
         "Putem Vibera",
         "Kontakt centar Sektora trgovine",
         "Putem poste",
+        "Lično"
       ]),
     compliantNature: Yup.string()
       .required("Obavezan je odabir tipa reklamacije")
@@ -63,14 +64,15 @@ function CreatePost() {
         "Neočitano stanje",
         "Deblokada regulatora",
         "Havarija",
-        "Primedba na obracun",
+        "Primedba na obračun",
+        "Dotrajali ormarić"
       ]),
     justifiedComplaint: Yup.string()
       .required("Obavezan je odabir opravdanosti reklamacije")
-      .oneOf(["Da", "Ne"]),
+      .oneOf(["Reklamacija je opravdana", "Reklamacija je neopravdana"]),
     compliantEnd: Yup.string()
       .required("Obavezan je odabir statusa zakljucenosti reklamacije")
-      .oneOf(["Da", "Ne"]),
+      .oneOf(["Reklamacija je zaključena", "Reklamacija je nezaključena"]),
   });
 
   let history = useHistory();
@@ -238,8 +240,8 @@ function CreatePost() {
                 <option value='' disabled>
                   Da li je reklamacija opravdana?
                 </option>
-                <option value='Da'>Da</option>
-                <option value='Ne'>Ne</option>
+                <option value='Reklamacija je opravdana'>Reklamacija je opravdana</option>
+                <option value='Reklamacija je neopravdana'>Reklamacija je neopravdana</option>
               </Field>{" "}
               <br></br>
               <label>ZAKLJUČENO :</label>
@@ -252,8 +254,8 @@ function CreatePost() {
                 <option value='' disabled>
                   Da li je reklamacija zatvorena?
                 </option>
-                <option value='Da'>Da</option>
-                <option value='Ne'>Ne</option>
+                <option value='Reklamacija je zaključena'>Reklamacija je zaključena</option>
+                <option value='Reklamacija je nezaključena'>Reklamacija je nezaključena</option>
               </Field>{" "}
               <br></br>
               <label>Odgovor na reklamaciju : </label>
@@ -273,7 +275,6 @@ function CreatePost() {
               </button>
             </div>
           </Form>
-          {/* </div> */}
         </Formik>
       </FormSt>
     </HelmetProvider>

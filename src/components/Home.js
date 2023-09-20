@@ -8,6 +8,7 @@ import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 /* import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorderIcon"; */
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from "react-bootstrap-table2-paginator";
+//import defaultSorted from "react-bootstrap-table2-paginator";
 //import cellEditFactory, {Type} from "react-bootstrap-table2-editor";
 import filterFactory, {
   textFilter,
@@ -18,6 +19,7 @@ import {
   selectOptionsCreatePost,
 } from "../constants";
 import HomeTable from "../styledComponents/HomeTable.style";
+import moment from "moment";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 
 function Home() {
@@ -37,7 +39,6 @@ function Home() {
         });
     }
   }, []);
-
   //header definition
 
   const columns = [
@@ -107,6 +108,19 @@ function Home() {
       /* filter: dateFilter(), */
     },
     {
+      dataField: "",
+      text: "Vreme rešavanja",
+      text: "Vreme rešavanja",
+      formatter: (cell, row) => {
+        const receiveDate = moment(row.recieveCompliantDate, "YYYY-MM-DD");
+        const endDate = moment(row.endCompliantDate, "YYYY-MM-DD");
+        let resolutionTime = endDate.diff(receiveDate, "days"); // Računanje razlike u danima
+        resolutionTime = resolutionTime === 1 ? '1 dan' : resolutionTime + 'dana';
+        return resolutionTime
+      },
+      sort: true,
+    },
+    {
       dataField: "note",
       sort: true,
       text: "Odgovor",
@@ -127,39 +141,42 @@ function Home() {
     },
   ];
   const handleRowClick = (row) => {
+    // history.push(`/post/${row.id}/${row.resolutionTime}`);
     history.push(`/post/${row.id}`); // Navigacija na stranicu za uređivanje
+
   };
   return (
     <HelmetProvider>
       <div>
-      <HomeTable>
-      <Helmet>
-      <title>Početna strana</title>
-      </Helmet>
-        <BootstrapTable
-          keyField='id'
-          className='table table-striped table-bordered table-hover table-sm table-responsive react-bootstrap-table filter-text '
-          data={listOfPosts}
-          columns={columns}
-          responsive
-          bordered
-          striped
-          hover
-          condensed
-          noDataIndication='Nisu se uspešno učitali podaci'
-          pagination={paginationFactory()}
-          rowEvents={{
-            onClick: (e, row) => {
-              handleRowClick(row); // Poziv funkcije za rukovanje klikom na red
-            },
-          }}
-          /* cellEdit = {cellEditFactory({
-      mode: "dbclick",
-      blurToSave: true,
-    })} */
-          filter={filterFactory()}
-        />
-      </HomeTable>
+        <HomeTable>
+          <Helmet>
+            <title>Početna strana</title>
+          </Helmet>
+          <BootstrapTable
+            keyField='id'
+            className='table table-striped table-bordered table-hover table-sm table-responsive react-bootstrap-table filter-text '
+            data={listOfPosts}
+            columns={columns}
+            responsive
+            bordered
+            striped
+            hover
+            condensed
+            noDataIndication='Nisu se uspešno učitali podaci'
+            defaultSorted={[{dataField: 'recieveCompliantDate', order: 'desc'}]}
+            pagination={paginationFactory()}
+            rowEvents={{
+              onClick: (e, row) => {
+                handleRowClick(row); // Poziv funkcije za rukovanje klikom na red
+              },
+            }}
+            /* cellEdit = {cellEditFactory({
+        mode: "dbclick",
+        blurToSave: true,
+      })} */
+            filter={filterFactory()}
+          />
+        </HomeTable>
       </div>
     </HelmetProvider>
   );
